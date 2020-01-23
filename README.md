@@ -37,7 +37,7 @@ In another terminal, clone the graph node and start it:
 ```bash
   git clone https://github.com/graphprotocol/graph-node/
   cd graph-node/docker
-  rm -rf data
+  sudo rm -rf data
   ./setup.sh
   docker-compose up
 ```
@@ -46,6 +46,16 @@ In another terminal, clone the graph node and start it:
 
 > If docker prompts you with the error `The reorg threshold 50 is larger than the size of the chain 7, you probably want to set the ETHEREUM_REORG_THRESHOLD environment variable to 0`,
   simply add a new env variable in `docker-compose.yml` named `ETHEREUM_REORG_THRESHOLD` assigning it to 0 and start it again.
+
+> If deploying the graph gives you an `ECONNRESET` error and you see this error in graph docker container logs:
+```
+graph-node_1  | thread 'tokio-runtime-worker-6' panicked at 'Ethereum node provided genesis block hash 0x3a78…e93b, but we expected d3abe80cb2afb34ca2b5e0187a15e87846ca5a01ed7fc802dad063300529c5a7. Did you change networks without changing the network name?', store/postgres/src/store.rs:246:21
+```
+
+Then make sure you followed the step above to delete graph's postgres data. You can also do:
+```bash
+  docker rm -v docker_postgres_1
+```
 
 ##### 4. Deploy local Aragon Court instance
 To deploy a local instance run the following commands on a separate terminal:
